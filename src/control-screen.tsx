@@ -2,6 +2,7 @@ import './control-screen.css'
 import Joystick1D from './components/joystick-1d';
 import { useState } from 'react';
 import { useRobotControl } from './hooks/use-robot-control';
+import ConnectButton from './components/connection-button';
 
 function ControlScreen() {
   const [val, setVal] = useState(0);
@@ -19,6 +20,7 @@ function ControlScreen() {
             }
           />
         <p>{val.toFixed(0)}</p>
+        <ConnectButton />
       </div>
     </>
   )

@@ -19,7 +19,6 @@ function ConnectButton() {
       >
         {isConnected ? '🔌 Trennen' : '📡 Verbinden'}
       </button>
-      <p>Status: {isConnected ? '✅ Verbunden' : '❌ Getrennt'}</p>
     </div>
   );
 }
