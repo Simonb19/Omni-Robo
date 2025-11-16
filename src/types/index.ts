@@ -1,6 +1,10 @@
 export type ConnectionStatus = {
-    isConnected: boolean,
-    checkConnection: () => void
+    isConnected: boolean;
+    checkConnection: () => Promise<boolean>;
+    connect: () => Promise<boolean>;
+    disconnect: () => Promise<void>;
+    device: BluetoothDevice | null;
+    controlCharacteristic: BluetoothRemoteGATTCharacteristic | null;
 }
 
 export type RobotControls = {

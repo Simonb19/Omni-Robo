@@ -1,5 +1,6 @@
 import { BounceLoader } from "react-spinners"
 import { useConnection } from "./hooks/use-connection";
+import ConnectButton from "./components/connection-button";
 import './connection-screen.css'
 
 function ConnectionScreen() {
@@ -7,14 +8,21 @@ function ConnectionScreen() {
   
     return (
         <>
-            <div className="container">
-                <BounceLoader color="white"/>
-                <p>{isConnected ? "Succesfully connected" : "Checking Connection..."}</p>
-                <div className="border-1 p-4 rounded-2xl mt-4">
-                <p>Name: Omni Robo</p>
-                <p>Passwort: geheimnis</p>
-                </div>
-            </div>
+            <div className="container gap-4">
+        {!isConnected ? (
+            <>
+            <h1>🤖 Omni Robo</h1>
+            <p>Verbinde dich mit deinem Roboter</p>
+            <ConnectButton />
+            </>
+        ) : (
+            <>
+            <h2>✅ Verbunden!</h2>
+            <p>Roboter ist bereit</p>
+            <ConnectButton />
+            </>
+        )}
+        </div>
         </>
     )
 }
