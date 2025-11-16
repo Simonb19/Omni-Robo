@@ -1,10 +1,10 @@
 import './app.css'
 import ControlScreen from './control-screen';
 import ConnectionScreen from './connection-screen';
-import { useRobotControl } from './hooks/use-robot-control';
+import { useConnection } from './hooks/use-connection';
 
 function App() {
-  const { isConnected} = useRobotControl();
+  const { isConnected} = useConnection();
 
   return isConnected ? <ControlScreen /> : <ConnectionScreen />
 }

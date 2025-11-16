@@ -1,4 +1,4 @@
-import { BounceLoader } from "react-spinners"
+//import { BounceLoader } from "react-spinners"
 import { useConnection } from "./hooks/use-connection";
 import ConnectButton from "./components/connection-button";
 import './connection-screen.css'
