@@ -6,7 +6,7 @@ function ConnectionContextProvider ({children}: React.PropsWithChildren) {
 
      const checkConnection = async () => {
         try {
-            const response = await fetch('http://192.168.4.1/status');
+            const response = await fetch('https://192.168.4.1/status');
             setIsConnected(response.ok)
             console.log(response)
         } catch {

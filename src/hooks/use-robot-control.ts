@@ -2,7 +2,7 @@ import { useCallback, useRef, useEffect } from 'react';
 import { useConnection } from './use-connection';
 import type { UseRobotControlOptions, RobotControls } from '../types';
 
-const ROBOT_BASE_URL = 'http://192.168.4.1';
+const ROBOT_BASE_URL = 'https://192.168.4.1';
 
 export const useRobotControl = (options?: UseRobotControlOptions) => {
   const { heartbeatInterval = 2000 } = options || {};
