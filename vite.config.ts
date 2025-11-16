@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/Omni-Robo',
   plugins: [react(), tailwindcss(), VitePWA({
     includeAssets: ["favicon.ico", "apple-touch-icon.png", "masked-icon.svg"],
     registerType: 'autoUpdate',
