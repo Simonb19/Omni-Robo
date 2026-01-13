@@ -7,7 +7,7 @@ export type ConnectionStatus = {
   controlCharacteristic: BluetoothRemoteGATTCharacteristic | null;
 };
 
-export type MotorDirection = "RL" | "LL"; // Rechtslauf / Linkslauf
+export type MotorDirection = 'RL' | 'LL'; // Rechtslauf / Linkslauf
 
 export type Motor = {
   direction: MotorDirection;
@@ -15,8 +15,21 @@ export type Motor = {
 };
 
 export type RobotControls = {
+  drive?: {
+    omniMode: boolean;
+
+    x: number; // -100 to 100 (strafe, only used in omni mode)
+    y: number; // -100 to 100 (forward/backward)
+    rotation: number; // -100 to 100 (turn)
+  };
+
   gripper?: number; // -100 to 100
-  motor1?: Motor;
+
+  debug?: {
+    motor1?: Motor;
+    motor2?: Motor;
+    motor3?: Motor;
+  };
 };
 
 export type UseRobotControlOptions = {

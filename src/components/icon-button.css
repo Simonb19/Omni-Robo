@@ -1,0 +1,40 @@
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+    transform: scale(1.05);
+}
+
+.icon-button:active {
+    transform: scale(0.95);
+}
+
+.icon-button:focus {
+    outline: none;
+}
+
+.icon-button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+.icon-button-top-left {
+    position: absolute;
+    top: 24px;
+    left: 32px;
+}
+
+.icon-button-top-right {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+}

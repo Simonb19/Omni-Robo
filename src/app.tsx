@@ -1,12 +1,13 @@
-import './app.css'
+import './app.css';
 import ControlScreen from './control-screen';
 import ConnectionScreen from './connection-screen';
 import { useConnection } from './hooks/use-connection';
 
 function App() {
-  const { isConnected} = useConnection();
+  const { isConnected } = useConnection();
 
-  return isConnected ? <ControlScreen /> : <ConnectionScreen />
+  // return isConnected ? <ControlScreen /> : <ConnectionScreen />;
+  return <ControlScreen />;
 }
 
-export default App
+export default App;
