@@ -1,11 +1,11 @@
 import { useCallback, useRef, useEffect } from 'react';
 import type { UseRobotControlOptions, RobotControls } from '../types';
-import { useConnection } from './use-connection'; // ← WICHTIG!
+import { useConnection } from './use-connection';
 
 export const useRobotControl = (options?: UseRobotControlOptions) => {
   const { heartbeatInterval = 2000 } = options || {};
   
-  // ← Hole Connection-State aus dem Context!
+  // Hole Connection-State aus dem Context!
   const { isConnected, controlCharacteristic, checkConnection } = useConnection();
   
   const heartbeatTimerRef = useRef<number>(0);
@@ -13,16 +13,6 @@ export const useRobotControl = (options?: UseRobotControlOptions) => {
   const lastSentControlsRef = useRef<RobotControls | null>(null);
   const commandQueueRef = useRef<RobotControls[]>([]);
   const isProcessingRef = useRef(false);
-
-  // ENTFERNE diese Zeilen - kommen jetzt aus Context:
-  // const [isConnected, setIsConnected] = useState(false);
-  // const [device, setDevice] = useState<BluetoothDevice | null>(null);
-  // const [controlCharacteristic, setControlCharacteristic] = useState<BluetoothRemoteGATTCharacteristic | null>(null);
-  
-  // ENTFERNE auch connect/disconnect - kommen aus Context:
-  // const connect = useCallback(async () => { ... }, []);
-  // const disconnect = useCallback(async () => { ... }, []);
-  // const checkConnection = useCallback(async () => { ... }, [device]);
 
   const resetHeartbeatRef = useRef<() => void | undefined>(undefined);
 
@@ -84,14 +74,14 @@ export const useRobotControl = (options?: UseRobotControlOptions) => {
   }, [controlCharacteristic, resetHeartbeat]);
 
   const sendCommand = useCallback((controls: RobotControls) => {
-    console.log('📤 sendCommand called, isConnected:', isConnected, 'controls:', controls);
+    console.log('sendCommand called, isConnected:', isConnected, 'controls:', controls);
     
     if (!isConnected) {
       console.warn('Not connected to robot');
       return;
     }
     
-    console.log('✓ Adding to queue');
+    console.log('Adding to queue');
     commandQueueRef.current.push(controls);
     processQueue();
   }, [isConnected, processQueue]);
@@ -109,6 +99,6 @@ export const useRobotControl = (options?: UseRobotControlOptions) => {
 
   return {
     sendCommand,
-    isConnected, // ← Kommt jetzt aus Context
+    isConnected,
   };
 };
