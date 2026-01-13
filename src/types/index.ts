@@ -18,12 +18,15 @@ export type RobotControls = {
   drive?: {
     omniMode: boolean;
 
-    x: number; // -100 to 100 (strafe, only used in omni mode)
-    y: number; // -100 to 100 (forward/backward)
-    rotation: number; // -100 to 100 (turn)
+    x?: number; // -100 to 100 (strafe, only used in omni mode)
+    y?: number; // -100 to 100 (forward/backward)
+    rotation?: number; // -100 to 100 (turn)
   };
 
-  gripper?: number; // -100 to 100
+  gripper?: {
+    z?: number; // -100 to 100 (height up/down)
+    openClose?: number; // -100 to 100 (open/close)
+  };
 
   debug?: {
     motor1?: Motor;
