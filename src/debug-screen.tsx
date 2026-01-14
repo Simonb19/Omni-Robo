@@ -15,7 +15,7 @@ function DebugScreen() {
 
   const handleMotorCommand = (
     motorId: 1 | 2 | 3,
-    enable: boolean,
+    pwm: number,
     direction: MotorDirection
   ) => {
     const motorKey = `motor${motorId}` as 'motor1' | 'motor2' | 'motor3';
@@ -23,7 +23,7 @@ function DebugScreen() {
       debug: {
         [motorKey]: {
           direction,
-          enable,
+          pwm,
         },
       },
     });

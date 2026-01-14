@@ -23,7 +23,7 @@ export type MotorTestProps = {
   motorId: 1 | 2 | 3;
   onMotorCommand: (
     motorId: 1 | 2 | 3,
-    enable: boolean,
+    pwm: number,
     direction: MotorDirection
   ) => void;
 };

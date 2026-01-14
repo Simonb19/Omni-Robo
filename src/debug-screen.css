@@ -1,18 +1,24 @@
 .debug-screen-wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
+    -webkit-overflow-scrolling: touch;
 }
 
 .control-container {
     display: flex;
-    flex-direction: row;
-    align-items: stretch;
+    flex-direction: column;  /* von row zu column */
+    align-items: center;
     gap: 2rem;
     padding: 2rem;
-    min-height: 300px;
+    padding-top: 4rem;  /* Platz für den Back-Button */
+    padding-bottom: 2rem;
+    width: 100%;
 }
 
 .control-section {
@@ -39,9 +45,9 @@
 }
 
 .divider {
-    width: 2px;
-    background: linear-gradient(to bottom, transparent, #ccc, transparent);
-    align-self: stretch;
+    height: 2px;
+    width: 80%;
+    background: linear-gradient(to right, transparent, #ccc, transparent);
 }
 
 .value-display {

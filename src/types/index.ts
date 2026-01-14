@@ -7,11 +7,11 @@ export type ConnectionStatus = {
   controlCharacteristic: BluetoothRemoteGATTCharacteristic | null;
 };
 
-export type MotorDirection = 'RL' | 'LL'; // Rechtslauf / Linkslauf
+export type MotorDirection = 'EN1' | 'EN2'; // Rechtslauf / Linkslauf
 
 export type Motor = {
   direction: MotorDirection;
-  enable: boolean;
+  pwm: number;
 };
 
 export type RobotControls = {
