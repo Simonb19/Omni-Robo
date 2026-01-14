@@ -11,7 +11,7 @@ import { useJoystickControls } from '@/hooks/use-joystick-controls.ts';
 
 function DebugScreen() {
   const { sendCommand } = useRobotControl();
-  const { handleGripper } = useJoystickControls();
+  const { handleGripper } = useJoystickControls(false);
 
   const handleMotorCommand = (
     motorId: 1 | 2 | 3,
