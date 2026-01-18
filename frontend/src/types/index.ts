@@ -1,6 +1,6 @@
 export type ConnectionStatus = {
   isConnected: boolean;
-  checkConnection: () => Promise<boolean>;
+  // checkConnection: () => Promise<boolean>;
   connect: () => Promise<boolean>;
   disconnect: () => Promise<void>;
   device: BluetoothDevice | null;
@@ -33,8 +33,4 @@ export type RobotControls = {
     motor2?: Motor;
     motor3?: Motor;
   };
-};
-
-export type UseRobotControlOptions = {
-  heartbeatInterval?: number; // Default: 2000ms
 };

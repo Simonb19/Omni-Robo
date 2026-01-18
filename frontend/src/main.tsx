@@ -5,11 +5,12 @@ import App from './app.tsx';
 import DebugScreen from './debug-screen';
 import ConnectionContextProvider from './providers/connection-provider.tsx';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import ProtectedRoute from '@/components/protected-route.tsx';
 
 const router = createBrowserRouter(
   [
     { path: '/', element: <App /> },
-    { path: '/debug', element: <DebugScreen /> },
+    { path: '/debug', element: <ProtectedRoute><DebugScreen /></ProtectedRoute> },
   ],
   {
     basename: '/Omni-Robo',
