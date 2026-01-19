@@ -6,7 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/Omni-Robo',
+  base: '/Omni-Robo/',
   plugins: [
     react(),
     tailwindcss(),
