@@ -130,10 +130,6 @@ void applyMotorControls() {
 
 
 void calculateMecanumMotors() {
-  // TODO: Implement your mecanum wheel calculations here
-  // Use controls.drive.omniMode to determine which mode
-  // Use controls.drive.x, y, rotation as inputs
-  // Set controls.motor1/2/3 enable and direction
   
   getMotorCommands(controls.drive.x, controls.drive.y, controls.drive.rotation, controls.motors, controls.drive.omniMode);
   
@@ -179,6 +175,9 @@ void updateServo() {
     currentServoAngle -= angleChange;
     if (currentServoAngle <= 40) currentServoAngle = 40;
   }
+
+  DEBUG_PRINT("Servo written to: ");
+  DEBUG_PRINTLN(currentServoAngle);
   
   gripperServo.write((int)currentServoAngle);
 }

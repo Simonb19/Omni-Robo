@@ -26,6 +26,9 @@ void setup() {
   // LED
   pinMode(LED_PIN, OUTPUT);
 
+  
+  ESP32PWM::allocateTimer(0); // Timer 0 für Servo reservieren
+
   // Setup LEDC channels for motor PWM
   for (int i = 0; i < 3; i++) {
     ledcAttach(PWM_PIN[i], 20000, 8);  // Pin, frequency (20kHz), resolution (8-bit)
@@ -37,8 +40,10 @@ void setup() {
     pinMode(IN_1_PIN[i], OUTPUT);
     pinMode(IN_2_PIN[i], OUTPUT);
   }
+
   
   // Servo
+  gripperServo.setPeriodHertz(50);
   gripperServo.attach(SERVO_PIN);
   gripperServo.write(currentServoAngle);
 
@@ -74,9 +79,6 @@ void setup() {
 }
 
 void loop() {
-  Serial.println("loop läuft...");
-    delay(1000);
-    
   unsigned long currentMillis = millis();
 
   // Heartbeat - send status every 500ms when connected
