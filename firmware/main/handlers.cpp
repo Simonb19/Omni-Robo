@@ -2,7 +2,6 @@
 #include "constants.h"
 #include "helpers.h"
 #include <ArduinoJson.h>
-#include <ESP32Servo.h>
 
 void handleControlCommand(String jsonString) {
   DEBUG_PRINTLN("\n[handleControlCommand] Starting parse...");
@@ -32,10 +31,14 @@ void handleControlCommand(String jsonString) {
       }
     }
     
-    // TODO: Implement z-axis (height) control
+    // Z-axis (height) control via stepper
     if (gripperObj.containsKey("z")) {
-      controls.gripper.z = gripperObj["z"].as<int>();
-      updated = true;
+      int newZ = gripperObj["z"].as<int>();
+      if (newZ != controls.gripper.z) {
+        controls.gripper.z = newZ;
+        currentZSpeed = newZ;  // Set stepper speed (-100 to 100)
+        updated = true;
+      }
     }
   }
 
@@ -163,6 +166,7 @@ void updateStatus() {
 }
 
 void updateServo() {
+  static float lastWrittenAngle = -1;
   if (currentGripperSpeed == 0) return;
   
   float speedPercent = abs(currentGripperSpeed) / 100.0;
@@ -170,14 +174,59 @@ void updateServo() {
   
   if (currentGripperSpeed > 0) {
     currentServoAngle += angleChange;
-    if (currentServoAngle >= 130) currentServoAngle = 130;
+    if (currentServoAngle >= SERVO_MAX_ANGLE) currentServoAngle = SERVO_MAX_ANGLE;
   } else {
     currentServoAngle -= angleChange;
-    if (currentServoAngle <= 40) currentServoAngle = 40;
+    if (currentServoAngle <= SERVO_MIN_ANGLE) currentServoAngle = SERVO_MIN_ANGLE;
   }
 
   DEBUG_PRINT("Servo written to: ");
   DEBUG_PRINTLN(currentServoAngle);
   
-  gripperServo.write((int)currentServoAngle);
+  // Only write if angle actually changed
+  if ((int)currentServoAngle != (int)lastWrittenAngle) {
+    lastWrittenAngle = currentServoAngle;
+    ledcWrite(SERVO_PIN, angleToDuty(currentServoAngle));
+  }
 }
+
+void updateStepper() {
+  static unsigned long lastStepMicros = 0;
+  static unsigned long lastDebug = 0;
+  
+  // Motor aus wenn Speed = 0
+  if (currentZSpeed == 0) {
+    digitalWrite(STEPPER_EN, HIGH);
+    return;
+  }
+  
+  // Motor aktivieren + Richtung setzen
+  digitalWrite(STEPPER_EN, LOW);
+  digitalWrite(STEPPER_DIR, currentZSpeed > 0 ? HIGH : LOW);
+  
+  // Interval berechnen (schneller = kleineres Interval)
+  int absSpeed = abs(currentZSpeed);
+  unsigned long interval = map(absSpeed, 1, 100, MAX_STEP_INTERVAL, MIN_STEP_INTERVAL);
+  
+  // Step ausführen wenn genug Zeit vergangen
+  unsigned long now = micros();
+  if (now - lastStepMicros >= interval) {
+    lastStepMicros = now;
+    
+    digitalWrite(STEPPER_STEP, HIGH);
+    delayMicroseconds(5);
+    digitalWrite(STEPPER_STEP, LOW);
+  }
+  
+  // Debug alle 1 Sekunde
+  if (millis() - lastDebug > 1000) {
+    lastDebug = millis();
+    Serial.print("Stepper: speed=");
+    Serial.print(currentZSpeed);
+    Serial.print(", interval=");
+    Serial.print(interval);
+    Serial.println("us");
+  }
+}
+
+

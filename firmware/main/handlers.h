@@ -21,5 +21,6 @@ void applyMotorControls();
 void calculateMecanumMotors();
 void updateStatus();
 void updateServo();
+void updateStepper();
 
 #endif

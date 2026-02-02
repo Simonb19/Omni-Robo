@@ -73,3 +73,11 @@ if (omniMode) {
   normalizeSpeed(speeds);
   normalizedSpeedsToMotors(speeds, motors);
 }
+
+uint32_t angleToDuty(float angle) {
+  // 50Hz = 20ms Periode, 16-bit = 65536
+  // 1ms (0°)   = 5%  = 3277
+  // 2ms (180°) = 10% = 6554
+  return map(angle, 0, 180, 3277, 6554);
+}
+

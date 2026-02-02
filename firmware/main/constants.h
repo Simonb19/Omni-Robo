@@ -2,7 +2,6 @@
 #define CONSTANTS_H
 
 #include <Arduino.h>
-#include <ESP32Servo.h>
 #include "types.h"
 
 // BLE UUIDs
@@ -20,23 +19,31 @@ extern unsigned long previousHeartbeatMillis;
 extern const long heartbeatInterval;
 
 // Servo
-extern Servo gripperServo;
 extern float currentServoAngle;
 extern int currentGripperSpeed;
 extern unsigned long previousServoMillis;
 extern const long servoUpdateInterval;
 extern const float minSpeed;
 extern const float maxSpeed;
+extern const float SERVO_MIN_ANGLE;
+extern const float SERVO_MAX_ANGLE;
 
 // Connection state
 extern volatile bool deviceConnected;
 
+// Stepper
+extern volatile int currentZSpeed;
+extern unsigned long stepperInterval;
+extern unsigned long previousStepperMillis;
+extern const unsigned long MIN_STEP_INTERVAL;
+extern const unsigned long MAX_STEP_INTERVAL;
+
 // Pin definitions
 extern const int LED_PIN;
 extern const int SERVO_PIN;
-extern const int AUX_MOTOR_PWM;
-extern const int AUX_MOTOR_IN1;
-extern const int AUX_MOTOR_IN2;
+extern const int STEPPER_EN;
+extern const int STEPPER_STEP;
+extern const int STEPPER_DIR;
 extern const int PWM_PIN[3];
 extern const int IN_1_PIN[3];
 extern const int IN_2_PIN[3];

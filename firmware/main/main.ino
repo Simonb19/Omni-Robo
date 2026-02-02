@@ -3,7 +3,6 @@
 #include <BLEUtils.h>
 #include <BLE2902.h>
 #include <ArduinoJson.h>
-#include <ESP32Servo.h>
 #include <math.h>
 
 #include "types.h"
@@ -26,27 +25,31 @@ void setup() {
   // LED
   pinMode(LED_PIN, OUTPUT);
 
+  // Stepper
+  pinMode(STEPPER_EN, OUTPUT);
+  pinMode(STEPPER_STEP, OUTPUT);
+  pinMode(STEPPER_DIR, OUTPUT);
   
-  ESP32PWM::allocateTimer(0); // Timer 0 für Servo reservieren
+  digitalWrite(STEPPER_EN, HIGH);
+  digitalWrite(STEPPER_STEP, LOW);
+  digitalWrite(STEPPER_DIR, LOW);
 
-  // Setup LEDC channels for motor PWM
+  // DANN Motor PWM (bekommen Timer 1-3)
   for (int i = 0; i < 3; i++) {
-    ledcAttach(PWM_PIN[i], 20000, 8);  // Pin, frequency (20kHz), resolution (8-bit)
+    ledcAttachChannel(PWM_PIN[i], 20000, 8, i);
   }
 
-  
-  // Motor pins
+  // Motor direction pins
   for (int i = 0; i < 3; i++) {
     pinMode(IN_1_PIN[i], OUTPUT);
     pinMode(IN_2_PIN[i], OUTPUT);
   }
-
+  
   
   // Servo
-  gripperServo.setPeriodHertz(50);
-  gripperServo.attach(SERVO_PIN);
-  gripperServo.write(currentServoAngle);
-
+  ledcAttachChannel(SERVO_PIN, 50, 16,3 );
+  ledcWrite(SERVO_PIN, angleToDuty(currentServoAngle));
+  
   // BLE Setup
   BLEDevice::init("Omni Robo");
   pServer = BLEDevice::createServer();
@@ -98,9 +101,13 @@ void loop() {
     }
   }
 
+
   // Servo update
   if (currentMillis - previousServoMillis >= servoUpdateInterval) {
     previousServoMillis = currentMillis;
     updateServo();
   }
+  
+
+  updateStepper();
 }
