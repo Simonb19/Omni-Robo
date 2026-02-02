@@ -10,6 +10,7 @@ unsigned long previousHeartbeatMillis = 0;
 const long heartbeatInterval = 500;
 
 // Servo
+Servo gripperServo;
 float currentServoAngle = 85;
 int currentGripperSpeed = 0;
 unsigned long previousServoMillis = 0;

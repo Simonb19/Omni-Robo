@@ -34,6 +34,11 @@ void setup() {
   digitalWrite(STEPPER_STEP, LOW);
   digitalWrite(STEPPER_DIR, LOW);
 
+  // Servo
+  gripperServo.setPeriodHertz(50);           // Standard 50Hz servo
+  gripperServo.attach(SERVO_PIN, 500, 2400); // Pin, min pulse, max pulse (in μs)
+  gripperServo.write((int)currentServoAngle);
+
   // DANN Motor PWM (bekommen Timer 1-3)
   for (int i = 0; i < 3; i++) {
     ledcAttachChannel(PWM_PIN[i], 20000, 8, i);
@@ -44,11 +49,6 @@ void setup() {
     pinMode(IN_1_PIN[i], OUTPUT);
     pinMode(IN_2_PIN[i], OUTPUT);
   }
-  
-  
-  // Servo
-  ledcAttachChannel(SERVO_PIN, 50, 16,3 );
-  ledcWrite(SERVO_PIN, angleToDuty(currentServoAngle));
   
   // BLE Setup
   BLEDevice::init("Omni Robo");

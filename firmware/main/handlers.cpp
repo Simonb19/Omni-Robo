@@ -166,7 +166,6 @@ void updateStatus() {
 }
 
 void updateServo() {
-  static float lastWrittenAngle = -1;
   if (currentGripperSpeed == 0) return;
   
   float speedPercent = abs(currentGripperSpeed) / 100.0;
@@ -183,11 +182,8 @@ void updateServo() {
   DEBUG_PRINT("Servo written to: ");
   DEBUG_PRINTLN(currentServoAngle);
   
-  // Only write if angle actually changed
-  if ((int)currentServoAngle != (int)lastWrittenAngle) {
-    lastWrittenAngle = currentServoAngle;
-    ledcWrite(SERVO_PIN, angleToDuty(currentServoAngle));
-  }
+  // SIMPLIFIED: Just write the angle directly!
+  gripperServo.write((int)currentServoAngle);
 }
 
 void updateStepper() {

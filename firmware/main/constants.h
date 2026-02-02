@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "types.h"
+#include <ESP32Servo.h>
 
 // BLE UUIDs
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
@@ -19,6 +20,7 @@ extern unsigned long previousHeartbeatMillis;
 extern const long heartbeatInterval;
 
 // Servo
+extern Servo gripperServo;
 extern float currentServoAngle;
 extern int currentGripperSpeed;
 extern unsigned long previousServoMillis;

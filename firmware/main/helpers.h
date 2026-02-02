@@ -22,6 +22,4 @@ void normalizedSpeedsToMotors(float normalizedSpeeds[3], Motor motors[3]);
 // Get motor commands for all three wheels based on movement input
 void getMotorCommands(int8_t x, int8_t y, int8_t omega, Motor motors[3], bool omniMode);
 
-uint32_t angleToDuty(float angle);
-
 #endif
