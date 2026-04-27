@@ -63,9 +63,8 @@ void getMotorCommands(int8_t x, int8_t y, int8_t omega, Motor motors[3], bool om
       speeds[i] = getOmniWheelSpeed(x, y, omega, static_cast<WheelID>(i));
     }
   } else {
-    // PIVOT mode - nur Y (vorwärts/rückwärts) und Rotation
     for (int i = 0; i < 3; i++) {
-      speeds[i] = getOmniWheelSpeed(0, y, omega, static_cast<WheelID>(i));
+      speeds[i] = getOmniWheelSpeed(x, omega, 0, static_cast<WheelID>(i));
     }
   }
   

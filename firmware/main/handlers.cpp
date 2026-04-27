@@ -48,16 +48,15 @@ void handleControlCommand(String jsonString) {
     controls.debugMode = true;
     JsonObject debug = doc["debug"];
     
-    // Replace the three separate motor1/motor2/motor3 blocks with:
     const char* motorKeys[3] = {"motor1", "motor2", "motor3"};
     for (int i = 0; i < 3; i++) {
       if (debug.containsKey(motorKeys[i])) {
-        DEBUG_PRINT("Found motor: ");  // Add this
+        DEBUG_PRINT("Found motor: "); 
         DEBUG_PRINTLN(motorKeys[i]);
         JsonObject motor = debug[motorKeys[i]];
         if (motor.containsKey("pwm")) {
           controls.motors[i].pwm = motor["pwm"].as<uint8_t>();
-          DEBUG_PRINT("Set PWM: ");  // Add this
+          DEBUG_PRINT("Set PWM: "); 
           DEBUG_PRINTLN(controls.motors[i].pwm);
           updated = true;
         }
@@ -74,6 +73,8 @@ void handleControlCommand(String jsonString) {
     DEBUG_PRINTLN("Calling applyMotorControls");
     applyMotorControls();  // Apply debug motor values
   }
+
+  
   // Handle normal drive mode (mecanum calculation)
   else if (doc.containsKey("drive")) {
      controls.debugMode = false;
@@ -109,8 +110,6 @@ void handleControlCommand(String jsonString) {
 }
 
 void applyMotorControls() {
-  DEBUG_PRINTLN(">>> Inside applyMotorControls");
-  
   for (int i = 0; i < 3; i++) {
     DEBUG_PRINT("Motor "); DEBUG_PRINT(i);
     DEBUG_PRINT(" | PWM="); DEBUG_PRINT(controls.motors[i].pwm);
@@ -148,7 +147,7 @@ void updateStatus() {
     StaticJsonDocument<256> doc;
     JsonObject gripperStatus = doc.createNestedObject("gripper");
     gripperStatus["openClose"] = controls.gripper.openClose;
-    gripperStatus["z"] = controls.gripper.z;  // TODO: report actual z position when implemented
+    gripperStatus["z"] = controls.gripper.z; 
 
     doc["servoAngle"] = currentServoAngle;
     doc["speed"] = currentGripperSpeed;
