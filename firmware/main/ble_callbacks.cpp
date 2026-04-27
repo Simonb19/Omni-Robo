@@ -8,6 +8,8 @@ void MyServerCallbacks::onConnect(BLEServer* pServer) {
 
 void MyServerCallbacks::onDisconnect(BLEServer* pServer) {
   deviceConnected = false;
+  stopAllMotors();
+  delay(500);
   BLEDevice::startAdvertising();
 }
 

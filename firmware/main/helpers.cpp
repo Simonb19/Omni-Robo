@@ -8,7 +8,7 @@ Vector2D E_ALPHA[3];
 void initializeConstants() {
   // Initialize E_ALPHA array with proper values
   for (int i = 0; i < 3; i++) {
-    float angle_rad = degreesToRadians(THETA_DEG[i] + 225);
+    float angle_rad = degreesToRadians(THETA_DEG[i]);
     E_ALPHA[i] = calculateForceDirectionUnitVector(angle_rad);
   }
 }
@@ -19,12 +19,13 @@ float degreesToRadians(float degrees) {
 
 Vector2D calculateForceDirectionUnitVector(float alpha_i_rad) {
   return {
-    std::cos(alpha_i_rad),
-    std::sin(alpha_i_rad)
+    std::sin(alpha_i_rad),  // sin für x-Komponente
+    std::cos(alpha_i_rad)   // cos für y-Komponente
   };
 }
 
 float getOmniWheelSpeed(int8_t x, int8_t y, int8_t omega, WheelID wheel) {
+  // Kinematik: vx * sin(alpha) + vy * cos(alpha) + omega
   return x * E_ALPHA[wheel].x 
        + y * E_ALPHA[wheel].y 
        + omega * ROTATION_SCALE;
@@ -38,7 +39,7 @@ void normalizeSpeed(float speeds[3]) {
     }
   }
   
-  if (m > 0) {
+  if (m > 100.0f) {  // Nur normalisieren wenn über 100
     for (int i = 0; i < 3; i++) {
       speeds[i] = speeds[i] * 100.0f / m;
     }
@@ -56,21 +57,18 @@ void normalizedSpeedsToMotors(float normalizedSpeeds[3], Motor motors[3]) {
 
 void getMotorCommands(int8_t x, int8_t y, int8_t omega, Motor motors[3], bool omniMode) {
   float speeds[3];
-if (omniMode) {
+  
+  if (omniMode) {
     for (int i = 0; i < 3; i++) {
       speeds[i] = getOmniWheelSpeed(x, y, omega, static_cast<WheelID>(i));
     }
   } else {
-    // PIVOT mode - rotation around center with forward/backward
-    // TODO: Implement pivot mode calculation
-    // This mode should only use Y (forward/back) and omega (rotation)
-    // X-axis strafing is disabled in this mode
+    // PIVOT mode - nur Y (vorwärts/rückwärts) und Rotation
     for (int i = 0; i < 3; i++) {
-      speeds[i] = 0; // Placeholder
+      speeds[i] = getOmniWheelSpeed(0, y, omega, static_cast<WheelID>(i));
     }
   }
   
   normalizeSpeed(speeds);
   normalizedSpeedsToMotors(speeds, motors);
 }
-

@@ -46,6 +46,8 @@ extern const int SERVO_PIN;
 extern const int STEPPER_EN;
 extern const int STEPPER_STEP;
 extern const int STEPPER_DIR;
+extern const int BOTTOM_Z_PIN;
+extern const int TOP_Z_PIN;
 extern const int PWM_PIN[3];
 extern const int IN_1_PIN[3];
 extern const int IN_2_PIN[3];

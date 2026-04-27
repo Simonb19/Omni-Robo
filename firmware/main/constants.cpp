@@ -41,7 +41,9 @@ const int IN_2_PIN[3] = {32, 12, 19};
 const int STEPPER_EN = 5;
 const int STEPPER_STEP = 4;
 const int STEPPER_DIR = 21;
+const int BOTTOM_Z_PIN = 34;
+const int TOP_Z_PIN = 35;
 
 // Motor angles
-const float THETA_DEG[3] = {0, 120, 240};
-const float ROTATION_SCALE = 0.5;
+const float THETA_DEG[3] = {180.0, 300.0, 60.0};
+const float ROTATION_SCALE = 1.0;

@@ -110,31 +110,35 @@ void handleControlCommand(String jsonString) {
 
 void applyMotorControls() {
   DEBUG_PRINTLN(">>> Inside applyMotorControls");
+  
   for (int i = 0; i < 3; i++) {
     DEBUG_PRINT("Motor "); DEBUG_PRINT(i);
     DEBUG_PRINT(" | PWM="); DEBUG_PRINT(controls.motors[i].pwm);
-    DEBUG_PRINT(" | DIR="); DEBUG_PRINT(controls.motors[i].direction);
-    DEBUG_PRINT(" | PWM_PIN="); DEBUG_PRINT(PWM_PIN[i]);
-    DEBUG_PRINT(" | IN1_PIN="); DEBUG_PRINT(IN_1_PIN[i]);
-    DEBUG_PRINT(" | IN2_PIN="); DEBUG_PRINTLN(IN_2_PIN[i]);
-    if (controls.motors[i].pwm > 0) {
-      DEBUG_PRINTLN("  -> Setting motor ON");
-      digitalWrite(IN_1_PIN[i], controls.motors[i].direction == EN1 ? HIGH : LOW);
-      digitalWrite(IN_2_PIN[i], controls.motors[i].direction == EN1 ? LOW : HIGH);
-      ledcWrite(PWM_PIN[i], controls.motors[i].pwm);
-    } else {
-      DEBUG_PRINTLN("  -> Setting motor OFF");
-      ledcWrite(PWM_PIN[i], 0);
-      digitalWrite(IN_1_PIN[i], LOW);
+    DEBUG_PRINT(" | DIR="); DEBUG_PRINTLN(controls.motors[i].direction);
+    
+    // Richtung setzen (wie im Beispielcode)
+    if (controls.motors[i].direction == EN1) {
+      digitalWrite(IN_1_PIN[i], HIGH);
       digitalWrite(IN_2_PIN[i], LOW);
+    } else {
+      digitalWrite(IN_1_PIN[i], LOW);
+      digitalWrite(IN_2_PIN[i], HIGH);
     }
+    
+    // PWM setzen mit analogWrite (vereinfacht!)
+    analogWrite(PWM_PIN[i], controls.motors[i].pwm);
   }
 }
 
 
 void calculateMecanumMotors() {
-  
-  getMotorCommands(controls.drive.x, controls.drive.y, controls.drive.rotation, controls.motors, controls.drive.omniMode);
+  getMotorCommands(
+    -controls.drive.y, 
+    controls.drive.x, 
+    controls.drive.rotation, 
+    controls.motors, 
+    controls.drive.omniMode
+  );
   
   applyMotorControls();
 }
@@ -224,5 +228,32 @@ void updateStepper() {
     Serial.println("us");
   }
 }
+
+void stopAllMotors() {
+  DEBUG_PRINTLN("!!! EMERGENCY STOP - All motors halted !!!");
+  
+  // Alle Motor-PWM auf 0 setzen
+  for (int i = 0; i < 3; i++) {
+    controls.motors[i].pwm = 0;
+    controls.motors[i].direction = EN1;
+    
+    digitalWrite(IN_1_PIN[i], LOW);
+    digitalWrite(IN_2_PIN[i], LOW);
+    analogWrite(PWM_PIN[i], 0);
+  }
+  
+  // Drive inputs zurücksetzen
+  controls.drive.x = 0;
+  controls.drive.y = 0;
+  controls.drive.rotation = 0;
+  
+  // Gripper und Stepper stoppen
+  currentGripperSpeed = 0;
+  currentZSpeed = 0;
+  digitalWrite(STEPPER_EN, HIGH); // Stepper deaktivieren
+  
+  Serial.println("All motors stopped - Failsafe activated");
+}
+
 
 
