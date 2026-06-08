@@ -145,7 +145,7 @@ void applyMotorControls() {
     }
 
     // Geschwindigkeit über PWM ausgeben.
-    analogWrite(PWM_PIN[i], controls.motors[i].pwm);
+    ledcWrite(PWM_PIN[i], controls.motors[i].pwm);
   }
 }
 
@@ -289,7 +289,7 @@ void stopAllMotors() {
 
     digitalWrite(IN_1_PIN[i], LOW);
     digitalWrite(IN_2_PIN[i], LOW);
-    analogWrite(PWM_PIN[i], 0);
+    ledcWrite(PWM_PIN[i], 0);
   }
 
   // Fahrbefehl zurücksetzen.

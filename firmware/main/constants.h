@@ -47,7 +47,8 @@ extern const unsigned long MIN_STEP_INTERVAL;  // kleinstes Intervall = schnells
 extern const unsigned long MAX_STEP_INTERVAL;  // größtes Intervall  = langsamste Bewegung
 
 // --- Pin-Belegung ---
-extern const int LED_PIN;
+extern const int LED_PIN;             // Onboard LED
+extern const int LED_PINS[4];         // LEDs am Gehause
 extern const int SERVO_PIN;
 extern const int STEPPER_EN;
 extern const int STEPPER_STEP;

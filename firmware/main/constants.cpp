@@ -37,10 +37,13 @@ volatile bool deviceConnected = false;
 
 // --- Pin-Belegung ---
 const int LED_PIN = 2;
+const int LED_PINS[4] = {16,17,22,23};
 const int SERVO_PIN = 13;
-const int PWM_PIN[3]  = {25, 26, 27};   // PWM (Geschwindigkeit) je Motor
-const int IN_1_PIN[3] = {33, 14, 18};   // Richtungspin 1 je Motor
-const int IN_2_PIN[3] = {32, 12, 19};   // Richtungspin 2 je Motor
+
+const int PWM_PIN[3]  = {26, 27, 25};   // PWM (Geschwindigkeit) je Motor
+const int IN_1_PIN[3] = {14, 18, 33};   // Richtungspin 1 je Motor
+const int IN_2_PIN[3] = {12, 19, 32};   // Richtungspin 2 je Motor
+
 const int STEPPER_EN = 5;
 const int STEPPER_STEP = 4;
 const int STEPPER_DIR = 21;

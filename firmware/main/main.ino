@@ -37,6 +37,12 @@ void setup() {
   // Status-LED
   pinMode(LED_PIN, OUTPUT);
 
+  // --- Externe Status-LEDs am Gehäuse ---
+  for (int i = 0; i < 4; i++) {
+    pinMode(LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
+  }
+
   // --- Antriebsmotoren: je PWM-Pin + 2 Richtungspins (H-Brücke) ---
   for (int i = 0; i < 3; i++) {
     pinMode(PWM_PIN[i], OUTPUT);
@@ -44,7 +50,7 @@ void setup() {
     pinMode(IN_2_PIN[i], OUTPUT);
     digitalWrite(IN_1_PIN[i], LOW);
     digitalWrite(IN_2_PIN[i], LOW);
-    analogWrite(PWM_PIN[i], 0);   // Start: alle Motoren aus
+    ledcAttach(PWM_PIN[i], 20000, 8);   // 20 kHz, 8 Bit (0..255), eigene Kanäle --> Start: alle Motoren aus
   }
 
   // --- Stepper (Höhenachse Z) ---
@@ -57,6 +63,9 @@ void setup() {
   digitalWrite(STEPPER_DIR, LOW);
 
   // --- Servo (Greifer öffnen/schließen) ---
+  // Servo bekommt eigene LEDC-Timer, die die Motor-PWM NICHT anfasst
+  ESP32PWM::allocateTimer(2);
+  ESP32PWM::allocateTimer(3);
   gripperServo.setPeriodHertz(50);            // Standard-Servo: 50 Hz
   gripperServo.attach(SERVO_PIN, 500, 2400);  // Pin, min/max Pulsweite in µs
   gripperServo.write((int)currentServoAngle); // Startwinkel anfahren
@@ -108,15 +117,17 @@ void loop() {
     updateStatus();
   }
 
-  // Status-LED: dauerhaft an wenn verbunden, sonst blinken.
+  // Status-LED + Gehäuse-LEDs.
   if (deviceConnected) {
     digitalWrite(LED_PIN, HIGH);
+    setLedsConnected();          // Gehäuse-LEDs: dauerhaft an
   } else {
     if (currentMillis - previousMillis >= interval) {
       previousMillis = currentMillis;
       ledState = !ledState;
       digitalWrite(LED_PIN, ledState);
     }
+    updateSearchAnimation();     // "Suchen": Lauflicht
   }
 
   // Servo schrittweise zum Zielwinkel bewegen.

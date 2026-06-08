@@ -60,4 +60,14 @@ void normalizedSpeedsToMotors(float normalizedSpeeds[3], Motor motors[3]);
  */
 void getMotorCommands(int8_t x, int8_t y, int8_t omega, Motor motors[3], bool omniMode);
 
+/**
+ * Such-Animation (Lauflicht) für die Gehäuse-LEDs.
+ * Aufruf in loop(), solange keine Verbindung besteht. Non-blocking.
+ */
+void updateSearchAnimation();
+
+/**
+ * Setzt die Gehäuse-LEDs auf den "verbunden"-Zustand (alle an).
+ */
+void setLedsConnected();
 #endif

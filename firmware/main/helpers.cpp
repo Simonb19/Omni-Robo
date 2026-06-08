@@ -82,3 +82,35 @@ void getMotorCommands(int8_t x, int8_t y, int8_t omega, Motor motors[3], bool om
   normalizeSpeed(speeds);
   normalizedSpeedsToMotors(speeds, motors);
 }
+
+// ------------------------------------------------------------
+//  Such-Animation (Knight-Rider-Lauflicht) für die Gehäuse-LEDs.
+//  Non-blocking über millis().
+// ------------------------------------------------------------
+static unsigned long previousSearchMillis = 0;
+static const long searchInterval = 120;   // kleiner = schneller
+static int searchIndex = 0;               // aktuelle LED-Position
+static int searchDir = 1;                 // 1 = vor, -1 = zurueck
+
+void updateSearchAnimation() {
+  unsigned long now = millis();
+  if (now - previousSearchMillis < searchInterval) return;
+  previousSearchMillis = now;
+
+  // Nur die aktuelle LED an, der Rest aus.
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(LED_PINS[i], (i == searchIndex) ? HIGH : LOW);
+  }
+
+  // Position weiterschieben und am Rand umkehren (hin und her).
+  searchIndex += searchDir;
+  if (searchIndex >= 3) { searchIndex = 3; searchDir = -1; }
+  if (searchIndex <= 0) { searchIndex = 0; searchDir =  1; }
+}
+
+void setLedsConnected() {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(LED_PINS[i], HIGH);   // alle an = verbunden
+  }
+}
+
