@@ -33,13 +33,13 @@ In diesem Repo liegt nur die Software, also die Steuerungs-Website und die Firmw
 
 ---
 
-## 🎥 Demo-Video
+
 
 <div align="center">
 
 [![Demo-Video ansehen](docs/video-thumbnail.png)](VIDEO_LINK_HIER_EINFÜGEN)
 
-*Klicken, um den Roboter in Aktion zu sehen*
+
 
 </div>
 
@@ -120,11 +120,11 @@ Die Mechanik haben wir in Creo konstruiert und großteils im 3D-Druck gefertigt.
 
 Das Projekt ist als Gruppenarbeit zu fünft entstanden:
 
-- [Name 1] – Konstruktion / Mechanik
-- [Name 2] – Konstruktion / Mechanik / Dokumentation
-- [Name 3] – Konstruktion / Elektronik
-- [Name 4] – Elektronik / Software (Teamleitung)
-- [Name 5] – Elektronik / Software
+- Wendelin – Konstruktion / Mechanik
+- Felix – Konstruktion / Mechanik / Dokumentation
+- Joshua – Konstruktion / Elektronik
+- Simon – Elektronik / Software 
+- Lukas – Elektronik / Software
 
 <div align="center">
 
