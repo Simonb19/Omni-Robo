@@ -1,3 +1,8 @@
+// ============================================================
+//  Schnittstelle der Steuerlogik: JSON-Befehle verarbeiten,
+//  Motoren/Servo/Stepper ansteuern und Status zurückmelden.
+// ============================================================
+
 #ifndef HANDLERS_H
 #define HANDLERS_H
 
@@ -5,23 +10,23 @@
 #include <BLEDevice.h>
 #include "types.h"
 
-// Debug flag - set to false to disable all debug output
+// Debug-Schalter: auf false setzen, um alle Debug-Ausgaben abzuschalten.
 #define DEBUG_MODE true
 
-// Debug helper macro
-#define DEBUG_PRINT(x) if(DEBUG_MODE) Serial.print(x)
+// Debug-Makros: geben nur etwas aus, wenn DEBUG_MODE aktiv ist.
+#define DEBUG_PRINT(x)   if(DEBUG_MODE) Serial.print(x)
 #define DEBUG_PRINTLN(x) if(DEBUG_MODE) Serial.println(x)
 
-// External references to global variables defined in main.ino
+// Globale Objekte, die in main.ino definiert sind.
 extern RobotControls controls;
 extern BLECharacteristic* pStatusCharacteristic;
 
-void handleControlCommand(String jsonString);
-void applyMotorControls();
-void calculateMecanumMotors();
-void updateStatus();
-void updateServo();
-void updateStepper();
-void stopAllMotors();
+void handleControlCommand(String jsonString); // JSON parsen + verteilen
+void applyMotorControls();                     // Motorwerte auf Pins schreiben
+void calculateMecanumMotors();                 // Fahrbefehl -> Motorwerte
+void updateStatus();                           // Statusobjekt per BLE senden
+void updateServo();                            // Greiferwinkel anpassen
+void updateStepper();                          // Höhenachse schrittweise bewegen
+void stopAllMotors();                          // Not-Aus / Failsafe
 
 #endif

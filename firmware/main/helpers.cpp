@@ -1,12 +1,17 @@
+// ============================================================
+//  Umsetzung der Omni-Wheel-Kinematik (siehe helpers.h).
+// ============================================================
+
 #include "helpers.h"
 #include "constants.h"
 #include <cmath>
 
-// Define E_ALPHA array (declared as extern in constants.h)
+// Richtungs-Einheitsvektoren je Rad (in constants.h als extern bekannt).
 Vector2D E_ALPHA[3];
 
 void initializeConstants() {
-  // Initialize E_ALPHA array with proper values
+  // Für jedes Rad aus dem Einbauwinkel den Richtungsvektor vorberechnen,
+  // damit das im Fahrbetrieb nicht jedes Mal neu gerechnet werden muss.
   for (int i = 0; i < 3; i++) {
     float angle_rad = degreesToRadians(THETA_DEG[i]);
     E_ALPHA[i] = calculateForceDirectionUnitVector(angle_rad);
@@ -19,27 +24,29 @@ float degreesToRadians(float degrees) {
 
 Vector2D calculateForceDirectionUnitVector(float alpha_i_rad) {
   return {
-    std::sin(alpha_i_rad),  // sin für x-Komponente
-    std::cos(alpha_i_rad)   // cos für y-Komponente
+    std::sin(alpha_i_rad),  // x-Komponente
+    std::cos(alpha_i_rad)   // y-Komponente
   };
 }
 
 float getOmniWheelSpeed(int8_t x, int8_t y, int8_t omega, WheelID wheel) {
-  // Kinematik: vx * sin(alpha) + vy * cos(alpha) + omega
-  return x * E_ALPHA[wheel].x 
-       + y * E_ALPHA[wheel].y 
+  // Projektion des Bewegungsvektors auf die Radrichtung + Drehanteil.
+  return x * E_ALPHA[wheel].x
+       + y * E_ALPHA[wheel].y
        + omega * ROTATION_SCALE;
 }
 
 void normalizeSpeed(float speeds[3]) {
+  // Größten Betrag suchen.
   float m = 0;
   for (int i = 0; i < 3; i++) {
     if (std::abs(speeds[i]) > m) {
       m = std::abs(speeds[i]);
     }
   }
-  
-  if (m > 100.0f) {  // Nur normalisieren wenn über 100
+
+  // Nur skalieren, wenn ein Rad über 100 liegt (Verhältnis bleibt erhalten).
+  if (m > 100.0f) {
     for (int i = 0; i < 3; i++) {
       speeds[i] = speeds[i] * 100.0f / m;
     }
@@ -49,7 +56,9 @@ void normalizeSpeed(float speeds[3]) {
 void normalizedSpeedsToMotors(float normalizedSpeeds[3], Motor motors[3]) {
   for (int i = 0; i < 3; i++) {
     motors[i] = {
+      // Vorzeichen bestimmt die Drehrichtung ...
       normalizedSpeeds[i] >= 0 ? EN1 : EN2,
+      // ... Betrag wird von 0..100 auf 0..255 (PWM) umgerechnet.
       static_cast<uint8_t>(std::abs(normalizedSpeeds[i]) * 255.0f / 100.0f)
     };
   }
@@ -57,17 +66,19 @@ void normalizedSpeedsToMotors(float normalizedSpeeds[3], Motor motors[3]) {
 
 void getMotorCommands(int8_t x, int8_t y, int8_t omega, Motor motors[3], bool omniMode) {
   float speeds[3];
-  
+
   if (omniMode) {
+    // Omni-Modus: volle 2D-Bewegung + Drehung.
     for (int i = 0; i < 3; i++) {
       speeds[i] = getOmniWheelSpeed(x, y, omega, static_cast<WheelID>(i));
     }
   } else {
+    // Pivot-Modus: nur vor/zurück (x) und drehen (als y übergeben), kein Strafen.
     for (int i = 0; i < 3; i++) {
       speeds[i] = getOmniWheelSpeed(x, omega, 0, static_cast<WheelID>(i));
     }
   }
-  
+
   normalizeSpeed(speeds);
   normalizedSpeedsToMotors(speeds, motors);
 }

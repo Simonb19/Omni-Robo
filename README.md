@@ -2,163 +2,136 @@
 
 # 🤖 Omni-Robo
 
-**Ein omnidirektionaler Roboter mit Greifarm – gesteuert direkt aus dem Browser über Bluetooth.**
+### Ein omnidirektionaler Roboter mit Greifarm – gesteuert direkt aus dem Browser über Bluetooth.
 
-<!-- COVER: CAD-Render des Roboters hier einfügen (z. B. aus Creo exportiert) -->
-<img src="docs/cad-cover.png" alt="Omni-Robo CAD-Render" width="520">
+<img src="docs/cad-cover.png" width="560" alt="Omni-Robo CAD-Render">
 
-[![Live Demo](https://img.shields.io/badge/▶_Live_Demo-Steuerungs--App-2ea44f?style=for-the-badge)](https://simonb19.github.io/Omni-Robo/)
+<br><br>
 
-React · TypeScript · Vite · Web Bluetooth · ESP32 · C++
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Steuerung_öffnen-2ea44f?style=for-the-badge&logo=googlechrome&logoColor=white)](https://simonb19.github.io/Omni-Robo/)
+
+<br>
+
+![React](https://img.shields.io/badge/React-20232A?style=flat-square&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+![ESP32](https://img.shields.io/badge/ESP32-E7352C?style=flat-square&logo=espressif&logoColor=white)
+![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white)
+![Bluetooth](https://img.shields.io/badge/Web_Bluetooth-0082FC?style=flat-square&logo=bluetooth&logoColor=white)
 
 </div>
 
 ---
 
-## 📖 Über das Projekt
+## Über das Projekt
 
-Der **Omni-Robo** ist ein an der **HTL Steyr** (4. Jahrgang, KOP-Projekt) entwickelter, ferngesteuerter Roboter. Er besitzt einen **omnidirektionalen Antrieb mit drei um 120° versetzten Omni-Rädern**, wodurch er sich in jede Richtung bewegen und gleichzeitig drehen kann. Über eine vertikale Spindel (Z-Achse) und einen Servo-Greifer kann er zylindrische Bauteile aufnehmen, anheben und an anderer Stelle wieder absetzen.
+Omni-Robo ist ein ferngesteuerter Roboter, den wir in unserem KOP-Projekt im 4. Jahrgang an der HTL Steyr gebaut haben. Er fährt omnidirektional über drei Räder, kann sich also in jede Richtung bewegen und gleichzeitig drehen. Oben drauf sitzt ein Greifarm an einer Spindel, mit dem er Sachen aufheben, hochfahren und woanders wieder absetzen kann.
 
-Gesteuert wird der Roboter **ohne App-Installation** über eine Web-App, die sich per **Web Bluetooth** direkt mit dem ESP32 verbindet.
+Gesteuert wird er über eine Website, die sich per Bluetooth direkt mit dem Roboter verbindet. Man muss also nichts installieren – Seite öffnen, verbinden, losfahren.
 
-> 🏆 **Challenge:** In einem Parcours musste eine Cola-Dose gegriffen und auf eine zweite gestapelt sowie ein Tischtennisball in ein Ziel befördert werden – auf Zeit.
-
-**Dieses Repository enthält ausschließlich die Software** (Steuerungs-App + ESP32-Firmware). Die Mechanik wurde in **PTC Creo** konstruiert, die Elektronik/Platinen in **KiCad** – diese Dateien sind hier nicht enthalt­en, die Ergebnisse sind unten als Bilder dokumentiert.
+In diesem Repo liegt nur die Software, also die Steuerungs-Website und die Firmware für den ESP32. Die Mechanik haben wir in Creo konstruiert und großteils 3D-gedruckt, die Platinen in KiCad gezeichnet. Diese Dateien sind hier nicht dabei, aber weiter unten sind ein paar Bilder davon.
 
 ---
 
 ## 🎥 Demo-Video
 
-<!-- VIDEO: Hier den Link zum Fahr-Video einfügen (z. B. YouTube) und das Vorschaubild ersetzen -->
 <div align="center">
 
 [![Demo-Video ansehen](docs/video-thumbnail.png)](VIDEO_LINK_HIER_EINFÜGEN)
 
-*▶️ Klicken, um den Roboter in Aktion zu sehen*
+*Klicken, um den Roboter in Aktion zu sehen*
 
 </div>
 
 ---
 
-## ✨ Funktionen
+## Was er kann
 
-- **Omnidirektionales Fahren** – Bewegung in jede Richtung über zwei Joysticks (Fahren + Drehen)
-- **Greifer-Steuerung** – Öffnen/Schließen (Servo) und Höhe auf/ab (Schrittmotor, Z-Achse)
-- **Live-Verbindung per Bluetooth** – direkt aus dem Browser, ohne Installation
-- **Status-Rückmeldung** – der Roboter sendet zyklisch seinen Zustand zurück (Heartbeat); bei Verbindungsverlust wird automatisch ein Not-Aus ausgelöst
-- **Debug-Modus** – jeder Motor kann einzeln getestet werden
+Fahren funktioniert über zwei Joysticks – einer für die Bewegung, einer fürs Drehen. Der Greifer wird über einen eigenen Joystick gesteuert: zur Seite öffnet und schließt er (Servo), nach oben und unten fährt der Greifarm (Schrittmotor). Die ganze Verbindung läuft über Bluetooth direkt aus dem Browser.
+
+Der Roboter meldet während der Fahrt laufend seinen Status zurück. Wenn die Verbindung abbricht, bleibt er von selbst stehen, damit er nicht unkontrolliert weiterfährt. Zum Testen gibt es außerdem einen Debug-Modus, in dem man jeden Motor einzeln ansteuern kann.
 
 ---
 
-## 🛠️ Tech Stack
+## Wie die Steuerung funktioniert
 
-**Steuerungs-App (Frontend)**
-- **React** + **TypeScript**
-- **Vite** als Build-Tool
-- **Web Bluetooth API** – Verbindung zum Roboter direkt im Browser
-- **React Router** – Wechsel zwischen Steuerungs- und Debug-Ansicht
-- **Tailwind CSS** + **shadcn/ui** – UI-Komponenten
-- **react-joystick-component** – die virtuellen Joysticks
-- Deployment über **GitHub Pages**
+Die Website verbindet sich per Web Bluetooth direkt mit dem ESP32. Sobald man einen Joystick bewegt, schickt sie einen kleinen JSON-Befehl an den Roboter. Damit die Funkverbindung nicht überlastet wird, wird immer nur der aktuellste Befehl gesendet und gleiche Befehle werden übersprungen. Der ESP32 rechnet daraus die Geschwindigkeit für jedes der drei Räder aus und steuert die Motoren, den Schrittmotor und den Servo entsprechend an. Parallel dazu schickt er regelmäßig seinen Status zurück – bleibt diese Rückmeldung aus, stoppt er automatisch.
 
-**Firmware (Backend, ESP32)**
-- **C++** im **Arduino-Framework**
-- **BLE (GATT-Server)** zur Kommunikation mit der App
-- **ArduinoJson** zum Parsen der Steuerbefehle
-- **ESP32Servo** für den Greifer
-- Eigene **Omni-Wheel-Kinematik** zur Umrechnung der Joystick-Eingaben in Radgeschwindigkeiten
-
-**Hardware**
-- ESP32 · 2× L293D H-Brücken (3 DC-Motoren) · A4988 Schrittmotortreiber (NEMA 17, Z-Achse) · Servo (Greifer) · Status- und Akku-LEDs
-
----
-
-## ⚙️ Wie es funktioniert
-
-```
-┌──────────────┐   Web Bluetooth (BLE)   ┌──────────────┐
-│  Browser-App │ ──── JSON-Befehle ────► │    ESP32     │
-│  (React)     │ ◄─── Status/Heartbeat ─ │  (Firmware)  │
-└──────────────┘                         └──────┬───────┘
-                                                │
-                       ┌────────────────────────┼────────────────────────┐
-                       ▼                         ▼                        ▼
-                  DC-Motoren                 Schrittmotor              Servo
-                (3× Omni-Rad,                 (Z-Achse /              (Greifer
-                 H-Brücke)                     Höhe)                  auf/zu)
-```
-
-1. Die Web-App verbindet sich per **Web Bluetooth** direkt mit dem ESP32 (`navigator.bluetooth`).
-2. Joystick-Bewegungen werden als **JSON-Befehle** über eine BLE-Characteristic an den Roboter geschickt. Eine kleine Warteschlange sorgt dafür, dass immer nur der **aktuellste** Befehl gesendet und Duplikate übersprungen werden – das entlastet die Funkverbindung.
-3. Die Firmware **parst das JSON**, rechnet im Fahrbetrieb über die **Omni-Kinematik** die Geschwindigkeit jedes der drei Räder aus und steuert Motoren, Schrittmotor und Servo an.
-4. Der ESP32 meldet zyklisch seinen **Status** zurück. Bleibt diese Rückmeldung aus (Verbindungsabbruch), stoppt der Roboter automatisch alle Motoren.
-
-> 💡 **Hinweis:** Web Bluetooth wird von **Chrome/Edge** (Desktop & Android) unterstützt – nicht von Safari/iOS.
-
----
-
-## 🔌 Elektronik (KiCad)
-
-Die drei Platinen wurden in KiCad entworfen. Schaltpläne und 3D-Renders:
-
-### Schaltpläne
-
-| Hauptplatine (ESP32) | Motortreiber (A4988 + L293D) | LED-Platine |
-|:---:|:---:|:---:|
-| ![Schaltplan Platine 1](docs/schaltplan-p1.png) | ![Schaltplan Platine 2](docs/schaltplan-p2.png) | ![Schaltplan Platine 3](docs/schaltplan-p3.png) |
-
-### Platinen – 3D-Render
-
-| Hauptplatine | Treiberplatine | LED-Platine |
-|:---:|:---:|:---:|
-| ![Render Platine 1](docs/platine-1-render.png) | ![Render Platine 2](docs/platine-2-render.png) | ![Render Platine 3](docs/platine-3-render.png) |
-
----
-
-## 🏗️ Mechanik & Aufbau (Creo)
-
-<!-- Echte Fotos vom fertigen Roboter hier einfügen -->
 <div align="center">
-
-<img src="docs/robot-1.jpg" alt="Omni-Robo Foto 1" width="320">
-<img src="docs/robot-2.jpg" alt="Omni-Robo Foto 2" width="320">
-
+<img src="docs/architecture.png" width="760" alt="Aufbau der Steuerung">
 </div>
 
-Die Mechanik wurde in **PTC Creo** konstruiert und überwiegend im **3D-Druck** gefertigt: ein dreieckiger Grundrahmen trägt die drei Omni-Räder sowie eine zentrale vertikale Spindel, an der ein linear geführter Schlitten mit Greifer auf- und abfährt.
+Web Bluetooth funktioniert übrigens mit Chrome und Edge (am PC und unter Android), aber nicht mit Safari bzw. auf dem iPhone.
 
 ---
 
-## 📁 Projektstruktur
+## Technik
 
-```
-Omni-Robo/
-├── firmware/        # ESP32-Firmware (C++ / Arduino)
-│   └── main/        # BLE, Kinematik, Motor-/Servo-/Stepper-Steuerung
-└── frontend/        # Steuerungs-App (React + TypeScript + Vite)
-    └── src/         # Screens, Komponenten, Hooks, BLE-Verbindung
-```
+Die Website ist mit React und TypeScript gebaut, als Build-Tool kommt Vite zum Einsatz. Die Verbindung zum Roboter läuft über die Web-Bluetooth-API, deshalb geht alles direkt im Browser ohne extra App. Für die Oberfläche haben wir Tailwind und shadcn/ui verwendet, die Joysticks kommen von react-joystick-component und die Navigation zwischen Steuerung und Debug-Ansicht macht der React Router. Deployed ist die Seite über GitHub Pages.
+
+Die Firmware am ESP32 ist in C++ mit dem Arduino-Framework geschrieben. Sie nimmt die Befehle per Bluetooth (BLE) entgegen, liest das JSON mit ArduinoJson aus und steuert damit die Antriebsmotoren, den Schrittmotor für die Höhe und den Servo am Greifer. Die Umrechnung von der Joystick-Eingabe auf die Geschwindigkeit der einzelnen Räder übernimmt eine eigene Kinematik-Funktion.
+
+An Hardware steckt dahinter ein ESP32, zwei L293D-H-Brücken für die drei Fahrmotoren, ein A4988-Treiber für den Schrittmotor der Höhenachse, ein Servo für den Greifer sowie ein paar Status- und Akku-LEDs.
 
 ---
 
-## 👥 Team
+## Schaltpläne
 
-Entstanden als Gruppenprojekt (5 Personen) an der HTL Steyr:
+Wir haben drei Platinen entworfen: die Hauptplatine mit dem ESP32, die Treiberplatine mit den Motortreibern und eine kleine Platine für die Akku-LEDs.
 
-| Name | Rolle |
-|---|---|
-| [Name 1] | Konstruktion / Mechanik |
-| [Name 2] | Konstruktion / Mechanik / Dokumentation |
-| [Name 3] | Konstruktion / Elektronik |
-| [Name 4] *(Teamleitung)* | Elektronik / Software |
-| [Name 5] | Elektronik / Software |
+<div align="center">
+<table>
+<tr>
+<td align="center"><img src="docs/schaltplan-p1.png" width="270"><br><sub><b>Hauptplatine</b> · ESP32</sub></td>
+<td align="center"><img src="docs/schaltplan-p2.png" width="270"><br><sub><b>Treiberplatine</b> · A4988 + L293D</sub></td>
+<td align="center"><img src="docs/schaltplan-p3.png" width="270"><br><sub><b>LED-Platine</b></sub></td>
+</tr>
+</table>
+</div>
 
 ---
+
+## Platinen (3D-Ansicht aus KiCad)
+
+<div align="center">
+<table>
+<tr>
+<td align="center"><img src="docs/platine-1-render.png" width="270"><br><sub><b>Hauptplatine</b></sub></td>
+<td align="center"><img src="docs/platine-2-render.png" width="270"><br><sub><b>Treiberplatine</b></sub></td>
+<td align="center"><img src="docs/platine-3-render.png" width="270"><br><sub><b>LED-Platine</b></sub></td>
+</tr>
+</table>
+</div>
+
+---
+
+## Mechanik
+
+<div align="center">
+<img src="docs/robot-1.jpg" width="330">
+<img src="docs/robot-2.jpg" width="330">
+</div>
+
+Die Mechanik haben wir in Creo konstruiert und großteils im 3D-Druck gefertigt. Ein dreieckiger Grundrahmen trägt die drei Räder und in der Mitte eine senkrechte Spindel, an der der Greifer rauf- und runterfährt.
+
+---
+
+## Team
+
+Das Projekt ist als Gruppenarbeit zu fünft entstanden:
+
+- [Name 1] – Konstruktion / Mechanik
+- [Name 2] – Konstruktion / Mechanik / Dokumentation
+- [Name 3] – Konstruktion / Elektronik
+- [Name 4] – Elektronik / Software (Teamleitung)
+- [Name 5] – Elektronik / Software
 
 <div align="center">
 
-**[▶ Zur Steuerungs-App](https://simonb19.github.io/Omni-Robo/)**
+<br>
 
-HTL Steyr · KOP-Projekt · 4. Jahrgang
+**[▶ Zur Steuerung](https://simonb19.github.io/Omni-Robo/)**
+
+<sub>HTL Steyr · KOP-Projekt · 4. Jahrgang</sub>
 
 </div>
