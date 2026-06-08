@@ -108,8 +108,8 @@ Wir haben drei Platinen entworfen: die Hauptplatine mit dem ESP32, die Treiberpl
 ## Mechanik
 
 <div align="center">
-<img src="docs/cad-explosion-view.jpg" width="330">
-<img src="docs/cad-cover.png.jpg" width="330">
+<img src="docs/cad-explosion-view.png" width="330">
+<img src="docs/cad-cover.png" width="330">
 </div>
 
 Die Mechanik haben wir in Creo konstruiert und großteils im 3D-Druck gefertigt. Ein dreieckiger Grundrahmen trägt die drei Räder und in der Mitte eine senkrechte Spindel, an der der Greifer rauf- und runterfährt.
