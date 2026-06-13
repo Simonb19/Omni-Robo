@@ -47,8 +47,9 @@ const int IN_2_PIN[3] = {12, 19, 32};   // Richtungspin 2 je Motor
 const int STEPPER_EN = 5;
 const int STEPPER_STEP = 4;
 const int STEPPER_DIR = 21;
-const int BOTTOM_Z_PIN = 34;
-const int TOP_Z_PIN = 35;
+
+const int BOTTOM_Z_PIN = 34;   // Endlagenschalter Unten
+const int TOP_Z_PIN = 35;      // Endlagenschalter Oben
 
 // --- Kinematik ---
 // Einbauwinkel der 3 Omni-Räder (gleichmäßig, 120° versetzt).

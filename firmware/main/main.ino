@@ -37,6 +37,10 @@ void setup() {
   // Status-LED
   pinMode(LED_PIN, OUTPUT);
 
+  // --- Endlagenschalter (Z-Achse oben / unten) ---
+  pinMode(BOTTOM_Z_PIN, INPUT);    // Externer PULLUP in der Schaltung
+  pinMode(TOP_Z_PIN,    INPUT);    // Externer PULLUP in der Schaltung
+
   // --- Externe Status-LEDs am Gehäuse ---
   for (int i = 0; i < 4; i++) {
     pinMode(LED_PINS[i], OUTPUT);

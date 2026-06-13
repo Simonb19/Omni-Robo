@@ -238,6 +238,15 @@ void updateStepper() {
   static unsigned long lastStepMicros = 0;
   static unsigned long lastDebug = 0;
 
+   // Endlagen lesen (LOW = Schalter ausgelöst)
+   bool atBottom = (digitalRead(BOTTOM_Z_PIN) == LOW);
+   bool atTop    = (digitalRead(TOP_Z_PIN)    == LOW);
+
+   // Richtung blockieren, wenn Endlage erreicht
+   // currentZSpeed > 0 = nach oben, < 0 = nach unten
+   if (atTop    && currentZSpeed > 0) currentZSpeed = 0;
+   if (atBottom && currentZSpeed < 0) currentZSpeed = 0;
+
   // Stillstand: Treiber deaktivieren und raus.
   if (currentZSpeed == 0) {
     digitalWrite(STEPPER_EN, HIGH);
